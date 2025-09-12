@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "v1oW0nN5xonGu+IGFG+BkvM0IRwILqeeA8l2BnOONdrTPwkMizBXfXt/rMk3gnYxKfD/YjU5WXGieWwUdf1GvA==",
+  "success": true,
+  "projectFilePath": "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\DensoMTecGaugeReader.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\vinh.tt2\\.nuget\\packages\\opencvsharp4.runtime.win\\4.5.3.20210817\\opencvsharp4.runtime.win.4.5.3.20210817.nupkg.sha512"
+  ],
+  "logs": []
+}

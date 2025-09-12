@@ -1,0 +1,152 @@
+{
+  "version": 3,
+  "targets": {
+    "net5.0": {
+      "OpenCvSharp4.runtime.win/4.5.3.20210817": {
+        "type": "package",
+        "build": {
+          "build/netcoreapp/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win-x64/native/OpenCvSharpExtern.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/opencv_videoio_ffmpeg453_64.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/OpenCvSharpExtern.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/opencv_videoio_ffmpeg453.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
+      "DensoMTecGaugeReader.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/DensoMTecGaugeReader.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DensoMTecGaugeReader.Core.dll": {}
+        }
+      },
+      "DensoMTecGaugeReader.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "OpenCvSharp4.runtime.win": "4.5.3.20210817"
+        },
+        "compile": {
+          "bin/placeholder/DensoMTecGaugeReader.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DensoMTecGaugeReader.Infrastructure.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "OpenCvSharp4.runtime.win/4.5.3.20210817": {
+      "sha512": "q2PknNPPAJHjVEsrgdHtWVHzZsNlANnkj2SCw4DC/x8qeAX+Skp93KPLVoELNyU415P7RyjDHn7CGLSpNpltyQ==",
+      "type": "package",
+      "path": "opencvsharp4.runtime.win/4.5.3.20210817",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/net/OpenCvSharp4.runtime.win.props",
+        "build/netcoreapp/OpenCvSharp4.runtime.win.props",
+        "build/netstandard/OpenCvSharp4.runtime.win.props",
+        "opencvsharp4.runtime.win.4.5.3.20210817.nupkg.sha512",
+        "opencvsharp4.runtime.win.nuspec",
+        "runtimes/win-x64/native/OpenCvSharpExtern.dll",
+        "runtimes/win-x64/native/opencv_videoio_ffmpeg453_64.dll",
+        "runtimes/win-x86/native/OpenCvSharpExtern.dll",
+        "runtimes/win-x86/native/opencv_videoio_ffmpeg453.dll"
+      ]
+    },
+    "DensoMTecGaugeReader.Core/1.0.0": {
+      "type": "project",
+      "path": "../DensoMTecGaugeReader.Core/DensoMTecGaugeReader.Core.csproj",
+      "msbuildProject": "../DensoMTecGaugeReader.Core/DensoMTecGaugeReader.Core.csproj"
+    },
+    "DensoMTecGaugeReader.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../DensoMTecGaugeReader.Infrastructure/DensoMTecGaugeReader.Infrastructure.csproj",
+      "msbuildProject": "../DensoMTecGaugeReader.Infrastructure/DensoMTecGaugeReader.Infrastructure.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net5.0": [
+      "DensoMTecGaugeReader.Core >= 1.0.0",
+      "DensoMTecGaugeReader.Infrastructure >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\vinh.tt2\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\DensoMTecGaugeReader.Application.csproj",
+      "projectName": "DensoMTecGaugeReader.Application",
+      "projectPath": "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\DensoMTecGaugeReader.Application.csproj",
+      "packagesPath": "C:\\Users\\vinh.tt2\\.nuget\\packages\\",
+      "outputPath": "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\vinh.tt2\\AppData\\Roaming\\NuGet\\NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net5.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "projectReferences": {
+            "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {
+              "projectPath": "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj"
+            },
+            "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj": {
+              "projectPath": "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net5.0": {
+        "targetAlias": "net5.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.214\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
