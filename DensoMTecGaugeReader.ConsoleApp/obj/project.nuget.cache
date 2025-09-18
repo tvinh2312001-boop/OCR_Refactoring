@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "tlUzFqye3H7vn9XSbRrqp/aIB0R6At1xUgbgdNFbsL9MIhR8WvcK3GOxzkBJVNcW773suTIchJ0BQN7K0ytFhw==",
+  "dgSpecHash": "sNXtZAo4pbUp5mLByJrur3FmNAgErw5UClJTdoHIaWiVFbLFfqdhJHqJ385U87NO7CcEv0/3XFsCZmM0Msa59g==",
   "success": true,
-  "projectFilePath": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.ConsoleApp\\DensoMTecGaugeReader.ConsoleApp.csproj",
+  "projectFilePath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.ConsoleApp\\DensoMTecGaugeReader.ConsoleApp.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\vinh.tt2\\.nuget\\packages\\opencvsharp4.runtime.win\\4.5.3.20210817\\opencvsharp4.runtime.win.4.5.3.20210817.nupkg.sha512"
+    "C:\\Users\\vinh.tt2\\.nuget\\packages\\opencvsharp4\\4.11.0.20250507\\opencvsharp4.4.11.0.20250507.nupkg.sha512",
+    "C:\\Users\\vinh.tt2\\.nuget\\packages\\opencvsharp4.runtime.win\\4.11.0.20250507\\opencvsharp4.runtime.win.4.11.0.20250507.nupkg.sha512",
+    "C:\\Users\\vinh.tt2\\.nuget\\packages\\system.memory\\4.6.3\\system.memory.4.6.3.nupkg.sha512",
+    "C:\\Users\\vinh.tt2\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.1.2\\system.runtime.compilerservices.unsafe.6.1.2.nupkg.sha512"
   ],
   "logs": []
 }

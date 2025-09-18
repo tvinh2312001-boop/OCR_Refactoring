@@ -2,17 +2,30 @@
   "version": 3,
   "targets": {
     "net5.0": {
-      "OpenCvSharp4.runtime.win/4.5.3.20210817": {
+      "OpenCvSharp4/4.11.0.20250507": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.6.3",
+          "System.Runtime.CompilerServices.Unsafe": "6.1.2"
+        },
+        "compile": {
+          "lib/netstandard2.1/OpenCvSharp.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/OpenCvSharp.dll": {}
+        }
+      },
+      "OpenCvSharp4.runtime.win/4.11.0.20250507": {
         "type": "package",
         "build": {
-          "build/netcoreapp/_._": {}
+          "build/net5.0/_._": {}
         },
         "runtimeTargets": {
           "runtimes/win-x64/native/OpenCvSharpExtern.dll": {
             "assetType": "native",
             "rid": "win-x64"
           },
-          "runtimes/win-x64/native/opencv_videoio_ffmpeg453_64.dll": {
+          "runtimes/win-x64/native/opencv_videoio_ffmpeg4110_64.dll": {
             "assetType": "native",
             "rid": "win-x64"
           },
@@ -20,10 +33,31 @@
             "assetType": "native",
             "rid": "win-x86"
           },
-          "runtimes/win-x86/native/opencv_videoio_ffmpeg453.dll": {
+          "runtimes/win-x86/native/opencv_videoio_ffmpeg4110.dll": {
             "assetType": "native",
             "rid": "win-x86"
           }
+        }
+      },
+      "System.Memory/4.6.3": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp2.1/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/_._": {}
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/6.1.2": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+        },
+        "build": {
+          "buildTransitive/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.targets": {}
         }
       },
       "DensoMTecGaugeReader.Core/1.0.0": {
@@ -40,7 +74,9 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "dependencies": {
-          "OpenCvSharp4.runtime.win": "4.5.3.20210817"
+          "DensoMTecGaugeReader.Core": "1.0.0",
+          "OpenCvSharp4": "4.11.0.20250507",
+          "OpenCvSharp4.runtime.win": "4.11.0.20250507"
         },
         "compile": {
           "bin/placeholder/DensoMTecGaugeReader.Infrastructure.dll": {}
@@ -52,22 +88,87 @@
     }
   },
   "libraries": {
-    "OpenCvSharp4.runtime.win/4.5.3.20210817": {
-      "sha512": "q2PknNPPAJHjVEsrgdHtWVHzZsNlANnkj2SCw4DC/x8qeAX+Skp93KPLVoELNyU415P7RyjDHn7CGLSpNpltyQ==",
+    "OpenCvSharp4/4.11.0.20250507": {
+      "sha512": "j/R+G6xGC5IV2wGRU0/GF5qG/FrP+Uxp8dmNnXFlIdiw8Gfo4mtvKcBOBfS/bn4pP/7FNHLFX/xvMtgPJeDjAA==",
       "type": "package",
-      "path": "opencvsharp4.runtime.win/4.5.3.20210817",
+      "path": "opencvsharp4/4.11.0.20250507",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "build/net/OpenCvSharp4.runtime.win.props",
+        "lib/net48/OpenCvSharp.dll",
+        "lib/net48/OpenCvSharp.xml",
+        "lib/net6.0/OpenCvSharp.dll",
+        "lib/net6.0/OpenCvSharp.xml",
+        "lib/netstandard2.0/OpenCvSharp.dll",
+        "lib/netstandard2.0/OpenCvSharp.xml",
+        "lib/netstandard2.1/OpenCvSharp.dll",
+        "lib/netstandard2.1/OpenCvSharp.xml",
+        "opencvsharp4.4.11.0.20250507.nupkg.sha512",
+        "opencvsharp4.nuspec"
+      ]
+    },
+    "OpenCvSharp4.runtime.win/4.11.0.20250507": {
+      "sha512": "3PxMXyzR+pkL9UOx2PiBjZm+/iyCIu5D6OlA1sq9MH7oWrfvVnCXJlUYhIJv67F7SLUwUuGwXDIQBfdsL/54lg==",
+      "type": "package",
+      "path": "opencvsharp4.runtime.win/4.11.0.20250507",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/net48/OpenCvSharp4.runtime.win.props",
+        "build/net5.0/OpenCvSharp4.runtime.win.props",
         "build/netcoreapp/OpenCvSharp4.runtime.win.props",
         "build/netstandard/OpenCvSharp4.runtime.win.props",
-        "opencvsharp4.runtime.win.4.5.3.20210817.nupkg.sha512",
+        "opencvsharp4.runtime.win.4.11.0.20250507.nupkg.sha512",
         "opencvsharp4.runtime.win.nuspec",
         "runtimes/win-x64/native/OpenCvSharpExtern.dll",
-        "runtimes/win-x64/native/opencv_videoio_ffmpeg453_64.dll",
+        "runtimes/win-x64/native/opencv_videoio_ffmpeg4110_64.dll",
         "runtimes/win-x86/native/OpenCvSharpExtern.dll",
-        "runtimes/win-x86/native/opencv_videoio_ffmpeg453.dll"
+        "runtimes/win-x86/native/opencv_videoio_ffmpeg4110.dll"
+      ]
+    },
+    "System.Memory/4.6.3": {
+      "sha512": "qdcDOgnFZY40+Q9876JUHnlHu7bosOHX8XISRoH94fwk6hgaeQGSgfZd8srWRZNt5bV9ZW2TljcegDNxsf+96A==",
+      "type": "package",
+      "path": "system.memory/4.6.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "buildTransitive/net461/System.Memory.targets",
+        "buildTransitive/net462/_._",
+        "lib/net462/System.Memory.dll",
+        "lib/net462/System.Memory.xml",
+        "lib/netcoreapp2.1/_._",
+        "lib/netstandard2.0/System.Memory.dll",
+        "lib/netstandard2.0/System.Memory.xml",
+        "lib/netstandard2.1/_._",
+        "system.memory.4.6.3.nupkg.sha512",
+        "system.memory.nuspec"
+      ]
+    },
+    "System.Runtime.CompilerServices.Unsafe/6.1.2": {
+      "sha512": "2hBr6zdbIBTDE3EhK7NSVNdX58uTK6iHW/P/Axmm9sl1xoGSLqDvMtpecn226TNwHByFokYwJmt/aQQNlO5CRw==",
+      "type": "package",
+      "path": "system.runtime.compilerservices.unsafe/6.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "buildTransitive/net461/System.Runtime.CompilerServices.Unsafe.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.targets",
+        "lib/net462/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/net462/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/net6.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/net7.0/_._",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "system.runtime.compilerservices.unsafe.6.1.2.nupkg.sha512",
+        "system.runtime.compilerservices.unsafe.nuspec"
       ]
     },
     "DensoMTecGaugeReader.Core/1.0.0": {
@@ -88,35 +189,42 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\vinh.tt2\\.nuget\\packages\\": {}
+    "C:\\Users\\vinh.tt2\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\DensoMTecGaugeReader.Application.csproj",
+      "projectUniqueName": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\DensoMTecGaugeReader.Application.csproj",
       "projectName": "DensoMTecGaugeReader.Application",
-      "projectPath": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\DensoMTecGaugeReader.Application.csproj",
+      "projectPath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\DensoMTecGaugeReader.Application.csproj",
       "packagesPath": "C:\\Users\\vinh.tt2\\.nuget\\packages\\",
-      "outputPath": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\obj\\",
+      "outputPath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+      ],
       "configFilePaths": [
-        "C:\\Users\\vinh.tt2\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\vinh.tt2\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {
-              "projectPath": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj"
+            "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {
+              "projectPath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj"
             },
-            "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj": {
-              "projectPath": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj"
+            "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj": {
+              "projectPath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj"
             }
           }
         }
@@ -145,7 +253,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.214\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.416\\RuntimeIdentifierGraph.json"
       }
     }
   }

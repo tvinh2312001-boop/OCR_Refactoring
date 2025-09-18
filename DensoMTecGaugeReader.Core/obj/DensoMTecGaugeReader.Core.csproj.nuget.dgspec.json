@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {}
+    "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {}
   },
   "projects": {
-    "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {
+    "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj",
+        "projectUniqueName": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj",
         "projectName": "DensoMTecGaugeReader.Core",
-        "projectPath": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj",
+        "projectPath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj",
         "packagesPath": "C:\\Users\\vinh.tt2\\.nuget\\packages\\",
-        "outputPath": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\obj\\",
+        "outputPath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
         "configFilePaths": [
-          "C:\\Users\\vinh.tt2\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\vinh.tt2\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -52,7 +58,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.214\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.416\\RuntimeIdentifierGraph.json"
         }
       }
     }
