@@ -1,27 +1,33 @@
+using System.Linq;
 using OpenCvSharp;
-using DensoMTecGaugeReader.Core.Exceptions;
+using DensoMTecGaugeReader.Core.Contracts;
+using DensoMTecGaugeReader.Core.Models;
+using DensoMTecGaugeReader.Core.Common.Enums;
+using DensoMTecGaugeReader.Core.Common.Errors;
 
 namespace DensoMTecGaugeReader.Infrastructure.ImageProcessing
 {
     /// <summary>
-    /// Provides face detection utilities for round gauges.
-    /// Handles preprocessing and circle detection with OpenCV.
+    /// Round face detector implementation using OpenCV.
+    /// Implements IFaceDetector and returns GaugeFaceInfo.
     /// </summary>
-    public static class RoundFaceDetector
+    public class RoundFaceDetector : IGaugeFaceDetector
     {
         /// <summary>
-        /// Detect round gauge face from a preprocessed image using HoughCircles.
+        /// Detect round gauge face from an input image.
         /// </summary>
-        public static CircleSegment DetectGaugeFace(Mat preprocessedImage)
+        public GaugeFaceInfo Detect(Mat image)
         {
-            int maxRadius = GetGaugeFaceMaxRadius(preprocessedImage);
-            int minRadius = GetGaugeFaceMinRadius(preprocessedImage);
+            var preprocessed = Preprocess(image);
+
+            int maxRadius = GetGaugeFaceMaxRadius(preprocessed);
+            int minRadius = GetGaugeFaceMinRadius(preprocessed);
 
             var circles = Cv2.HoughCircles(
-                preprocessedImage,
+                preprocessed,
                 HoughModes.Gradient,
                 dp: 1,
-                minDist: preprocessedImage.Rows / 8,
+                minDist: preprocessed.Rows / 8,
                 param1: 100,
                 param2: 100,
                 minRadius: minRadius,
@@ -29,16 +35,22 @@ namespace DensoMTecGaugeReader.Infrastructure.ImageProcessing
             );
 
             if (circles.Length == 0)
-                throw new GaugeReadingProcessException(GaugeErrorCode.GaugeFaceNotFound);
+                throw new GaugeException(GaugeErrorCode.GaugeFaceNotFound, "No round face detected");
 
-            // Return the largest circle
-            return circles.OrderByDescending(c => c.Radius).First();
+            var circle = circles.OrderByDescending(c => c.Radius).First();
+
+            return new GaugeFaceInfo
+            {
+                FaceType = GaugeFaceType.Round,
+                Center = ((int)circle.Center.X, (int)circle.Center.Y),
+                Radius = circle.Radius
+            };
         }
 
         /// <summary>
         /// Preprocess image for face detection (grayscale, blur, Canny).
         /// </summary>
-        public static Mat GetPreprocessedImageForFaceDetection(Mat image)
+        private static Mat Preprocess(Mat image)
         {
             Mat grayImage = new();
             Cv2.CvtColor(image, grayImage, ColorConversionCodes.BGR2GRAY);
@@ -52,39 +64,15 @@ namespace DensoMTecGaugeReader.Infrastructure.ImageProcessing
             return canny;
         }
 
-        /// <summary>
-        /// Compute new face circle when image is resized.
-        /// </summary>
-        public static CircleSegment GetGaugeFaceInNewImage(CircleSegment original, double resizedRatio)
-        {
-            return new CircleSegment(
-                new Point(
-                    (float)(original.Center.X * resizedRatio),
-                    (float)(original.Center.Y * resizedRatio)
-                ),
-                (float)(original.Radius * resizedRatio)
-            );
-        }
-
-        /// <summary>
-        /// Compute resize ratio based on radius.
-        /// Default target radius is 110 px.
-        /// </summary>
-        public static double GetResizeRatio(float radius)
-        {
-            const double defaultRadius = 110.0;
-            return defaultRadius / radius;
-        }
-
         private static int GetGaugeFaceMinRadius(Mat image)
         {
-            int smallerSize = Math.Min(image.Width, image.Height);
+            int smallerSize = System.Math.Min(image.Width, image.Height);
             return (int)(smallerSize * 0.05);
         }
 
         private static int GetGaugeFaceMaxRadius(Mat image)
         {
-            int smallerSize = Math.Min(image.Width, image.Height);
+            int smallerSize = System.Math.Min(image.Width, image.Height);
             return (int)(smallerSize * 0.5);
         }
     }

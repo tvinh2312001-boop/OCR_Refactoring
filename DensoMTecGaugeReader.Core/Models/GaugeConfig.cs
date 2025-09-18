@@ -1,3 +1,5 @@
+using DensoMTecGaugeReader.Core.Common.Enums;
+
 namespace DensoMTecGaugeReader.Core.Models
 {
     /// <summary>
@@ -18,21 +20,5 @@ namespace DensoMTecGaugeReader.Core.Models
         public double EndAngle { get; set; }
 
         public string Unit { get; set; } = string.Empty;
-    }
-
-    public enum GaugeType
-    {
-        Pressure,
-        Thermo,
-        Compound,
-        Digital
-    }
-
-
-    public enum GaugeFaceType
-    {
-        Round,
-        Square,
-        Digital
     }
 }

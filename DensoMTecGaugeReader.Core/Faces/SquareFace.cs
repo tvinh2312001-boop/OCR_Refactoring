@@ -1,37 +1,32 @@
-using OpenCvSharp;
 using DensoMTecGaugeReader.Core.Contracts;
-using DensoMTecGaugeReader.Core.Models;
+using DensoMTecGaugeReader.Core.Common.Enums;
 
 namespace DensoMTecGaugeReader.Core.Faces
 {
     /// <summary>
-    /// Implementation for square/rectangular gauge faces.
-    /// Responsible for normalizing rectangular images and detecting hands.
+    /// Square gauge face domain model.
+    /// Represents the geometry of a rectangular dial.
     /// </summary>
     public class SquareFace : IGaugeFace
     {
         public GaugeFaceType FaceType => GaugeFaceType.Square;
 
-        public Mat Normalize(Mat raw)
+        public int Width { get; }
+        public int Height { get; }
+
+        public SquareFace(int width, int height)
         {
-            // TODO: Replace with actual square/rectangle detection
-            // Example: detect bounding box, crop and align
-            return raw.Clone();
+            Width = width;
+            Height = height;
         }
 
-        public GaugeHandInfo? ExtractHand(Mat normalizedImage)
+        /// <summary>
+        /// Normalize a point relative to the square face size.
+        /// Returns (x, y) between 0 and 1.
+        /// </summary>
+        public (double X, double Y) GetNormalizedPosition((int X, int Y) point)
         {
-            // TODO: Replace with detection logic for square faces
-            // Placeholder: simulate detected hand at 30°
-            return new GaugeHandInfo(
-                startX: 80,
-                startY: 80,
-                endX: 160,
-                endY: 200,
-                angle: 30,
-                length: 120,
-                confidence: 0.85
-            );
+            return ((double)point.X / Width, (double)point.Y / Height);
         }
     }
 }

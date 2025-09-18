@@ -1,22 +1,21 @@
 using OpenCvSharp;
+using DensoMTecGaugeReader.Core.Models;
 using DensoMTecGaugeReader.Infrastructure.Utils;
 
 namespace DensoMTecGaugeReader.Core.Services.Measurement
 {
     /// <summary>
-    /// Provides utilities for angle normalization and calculation.
+    /// Provides angle calculation and normalization logic.
     /// </summary>
     public static class AngleCalculator
     {
-        /// <summary>
-        /// Normalize angle based on baseline and hand position.
-        /// </summary>
-        public static double Normalize(LineSegmentPoint baseLine, LineSegmentPoint handLine)
+        public static double Normalize(GaugeFaceInfo face, GaugeHandInfo hand)
         {
-            double angle = GeometryUtils.CalculateAngle(baseLine, handLine);
+            // baseline: horizontal right
+            var baseline = new LineSegmentPoint(face.Center, new Point(face.Center.X + (int)face.Radius, face.Center.Y));
+            double angle = GeometryUtils.CalculateAngle(baseline, hand.Line);
 
-            // Adjust for orientation if needed
-            if (handLine.P2.Y < baseLine.P2.Y)
+            if (hand.Line.P2.Y < face.Center.Y)
                 angle = 360 - angle;
 
             return angle;

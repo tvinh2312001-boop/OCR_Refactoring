@@ -1,0 +1,5 @@
+D:\VINHTT\DensoMTechGaugeReader_\DensoMTecGaugeReader.Infrastructure\obj\Debug\net5.0\DensoMTecGaugeReader.Infrastructure.csprojAssemblyReference.cache
+D:\VINHTT\DensoMTechGaugeReader_\DensoMTecGaugeReader.Infrastructure\obj\Debug\net5.0\DensoMTecGaugeReader.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\VINHTT\DensoMTechGaugeReader_\DensoMTecGaugeReader.Infrastructure\obj\Debug\net5.0\DensoMTecGaugeReader.Infrastructure.AssemblyInfoInputs.cache
+D:\VINHTT\DensoMTechGaugeReader_\DensoMTecGaugeReader.Infrastructure\obj\Debug\net5.0\DensoMTecGaugeReader.Infrastructure.AssemblyInfo.cs
+D:\VINHTT\DensoMTechGaugeReader_\DensoMTecGaugeReader.Infrastructure\obj\Debug\net5.0\DensoMTecGaugeReader.Infrastructure.csproj.CoreCompileInputs.cache

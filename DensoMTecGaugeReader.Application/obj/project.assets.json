@@ -93,11 +93,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\DensoMTecGaugeReader.Application.csproj",
+      "projectUniqueName": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\DensoMTecGaugeReader.Application.csproj",
       "projectName": "DensoMTecGaugeReader.Application",
-      "projectPath": "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\DensoMTecGaugeReader.Application.csproj",
+      "projectPath": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\DensoMTecGaugeReader.Application.csproj",
       "packagesPath": "C:\\Users\\vinh.tt2\\.nuget\\packages\\",
-      "outputPath": "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\obj\\",
+      "outputPath": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Application\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\vinh.tt2\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -112,11 +112,11 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {
-              "projectPath": "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj"
+            "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {
+              "projectPath": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj"
             },
-            "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj": {
-              "projectPath": "\\\\10.8.24.27\\es\\01-Operation\\H-EDS\\H-Vinh.TT\\Backup_250912\\.NET\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj"
+            "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj": {
+              "projectPath": "D:\\VINHTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj"
             }
           }
         }

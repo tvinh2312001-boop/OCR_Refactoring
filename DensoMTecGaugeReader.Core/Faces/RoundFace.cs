@@ -1,37 +1,34 @@
-using OpenCvSharp;
 using DensoMTecGaugeReader.Core.Contracts;
-using DensoMTecGaugeReader.Core.Models;
+using DensoMTecGaugeReader.Core.Common.Enums;
 
 namespace DensoMTecGaugeReader.Core.Faces
 {
     /// <summary>
-    /// Implementation for round gauge faces.
-    /// Responsible for normalizing circular images and detecting hands.
+    /// Round gauge face domain model.
+    /// Represents the geometry of a circular dial.
     /// </summary>
     public class RoundFace : IGaugeFace
     {
         public GaugeFaceType FaceType => GaugeFaceType.Round;
 
-        public Mat Normalize(Mat raw)
+        public double Radius { get; }
+        public (int X, int Y) Center { get; }
+
+        public RoundFace(double radius, (int X, int Y) center)
         {
-            // TODO: Replace with actual circle detection + warp
-            // Example: detect circle via HoughCircles, crop & warp to normalize
-            return raw.Clone();
+            Radius = radius;
+            Center = center;
         }
 
-        public GaugeHandInfo? ExtractHand(Mat normalizedImage)
+        /// <summary>
+        /// Calculate the angle of a point relative to the face center.
+        /// </summary>
+        public double GetAngleFromPoint((int X, int Y) point)
         {
-            // TODO: Replace with HoughLines / contour logic
-            // Placeholder: simulate detected hand at 45°
-            return new GaugeHandInfo(
-                startX: 100,
-                startY: 100,
-                endX: 200,
-                endY: 200,
-                angle: 45,
-                length: 100,
-                confidence: 0.9
-            );
+            var dx = point.X - Center.X;
+            var dy = Center.Y - point.Y; // trục Y ngược trong ảnh
+            var angle = Math.Atan2(dy, dx) * 180.0 / Math.PI;
+            return angle < 0 ? angle + 360 : angle;
         }
     }
 }
