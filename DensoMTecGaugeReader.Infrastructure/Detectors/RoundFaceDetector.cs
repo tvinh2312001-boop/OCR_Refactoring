@@ -1,79 +1,71 @@
-using System.Linq;
-using OpenCvSharp;
+using System;
+using DensoMTecGaugeReader.Core.Common;
 using DensoMTecGaugeReader.Core.Contracts;
 using DensoMTecGaugeReader.Core.Models;
-using DensoMTecGaugeReader.Core.Common.Enums;
-using DensoMTecGaugeReader.Core.Common.Errors;
+using OpenCvSharp;
 
-namespace DensoMTecGaugeReader.Infrastructure.ImageProcessing
+namespace DensoMTecGaugeReader.Infrastructure.Detectors
 {
     /// <summary>
-    /// Round face detector implementation using OpenCV.
-    /// Implements IFaceDetector and returns GaugeFaceInfo.
+    /// Detects a round gauge face using HoughCircles.
     /// </summary>
     public class RoundFaceDetector : IGaugeFaceDetector
     {
-        /// <summary>
-        /// Detect round gauge face from an input image.
-        /// </summary>
-        public GaugeFaceInfo Detect(Mat image)
+        public GaugeFaceInfo DetectFace(string imagePath)
         {
-            var preprocessed = Preprocess(image);
+            using var src = Cv2.ImRead(imagePath, ImreadModes.Color);
+            if (src.Empty())
+                throw new ArgumentException("Image not found or cannot be read.", nameof(imagePath));
 
-            int maxRadius = GetGaugeFaceMaxRadius(preprocessed);
-            int minRadius = GetGaugeFaceMinRadius(preprocessed);
+            using var gray = new Mat();
+            using var blur = new Mat();
 
+            Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            Cv2.GaussianBlur(gray, blur, new Size(9, 9), 2);
+            Cv2.ImShow("Blur find face",blur );
             var circles = Cv2.HoughCircles(
-                preprocessed,
+                blur,
                 HoughModes.Gradient,
-                dp: 1,
-                minDist: preprocessed.Rows / 8,
-                param1: 100,
-                param2: 100,
-                minRadius: minRadius,
-                maxRadius: maxRadius
+                dp: 1.2,
+                minDist: Math.Min(src.Rows, src.Cols) / 8.0,
+                param1: 120,
+                param2: 50,
+                minRadius: (int)(Math.Min(src.Rows, src.Cols) * 0.15),
+                maxRadius: (int)(Math.Min(src.Rows, src.Cols) * 0.48)
             );
 
-            if (circles.Length == 0)
-                throw new GaugeException(GaugeErrorCode.GaugeFaceNotFound, "No round face detected");
+            if (circles == null || circles.Length == 0)
+                throw new InvalidOperationException("No round gauge face detected.");
 
-            var circle = circles.OrderByDescending(c => c.Radius).First();
+            var imgCenter = new Point(src.Cols / 2, src.Rows / 2);
+            CircleSegment best = circles[0];
+            double bestScore = double.MaxValue;
+
+            foreach (var c in circles)
+            {
+                var cpt = new Point((int)c.Center.X, (int)c.Center.Y);
+                double dc = GeometryUtils.GetDistance(cpt, imgCenter);
+                // prefer centered & large
+                double score = dc - c.Radius * 0.25;
+                if (score < bestScore)
+                {
+                    bestScore = score;
+                    best = c;
+                    Cv2.Circle(src, cpt, 3, Scalar.Red, -1);
+                    Cv2.Circle(src, cpt, (int)c.Radius, Scalar.Green, 2);
+                    Cv2.ImShow("Detected Circle", src);
+                    Cv2.WaitKey(0);
+                }
+            }
 
             return new GaugeFaceInfo
             {
-                FaceType = GaugeFaceType.Round,
-                Center = ((int)circle.Center.X, (int)circle.Center.Y),
-                Radius = circle.Radius
+                CenterX = best.Center.X,
+                CenterY = best.Center.Y,
+                Radius = best.Radius,
+                Width = src.Cols,
+                Height = src.Rows
             };
-        }
-
-        /// <summary>
-        /// Preprocess image for face detection (grayscale, blur, Canny).
-        /// </summary>
-        private static Mat Preprocess(Mat image)
-        {
-            Mat grayImage = new();
-            Cv2.CvtColor(image, grayImage, ColorConversionCodes.BGR2GRAY);
-
-            Mat bluredImage = new();
-            Cv2.GaussianBlur(grayImage, bluredImage, new Size(11, 11), 0);
-
-            Mat canny = new();
-            Cv2.Canny(bluredImage, canny, 100, 300);
-
-            return canny;
-        }
-
-        private static int GetGaugeFaceMinRadius(Mat image)
-        {
-            int smallerSize = System.Math.Min(image.Width, image.Height);
-            return (int)(smallerSize * 0.05);
-        }
-
-        private static int GetGaugeFaceMaxRadius(Mat image)
-        {
-            int smallerSize = System.Math.Min(image.Width, image.Height);
-            return (int)(smallerSize * 0.5);
         }
     }
 }

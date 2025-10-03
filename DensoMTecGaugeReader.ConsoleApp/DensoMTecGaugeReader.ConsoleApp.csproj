@@ -5,6 +5,12 @@
     <ProjectReference Include="..\DensoMTecGaugeReader.Core\DensoMTecGaugeReader.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="AppConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>

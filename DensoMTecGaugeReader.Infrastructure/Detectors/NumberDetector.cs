@@ -1,172 +1,114 @@
-using OpenCvSharp;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using DensoMTecGaugeReader.Core.Common;
 using DensoMTecGaugeReader.Core.Models;
-using DensoMTecGaugeReader.Core.Exceptions;
-using DensoMTecGaugeReader.Infrastructure.Utils;
+using DensoMTecGaugeReader.Infrastructure.Models;
+using OpenCvSharp;
 
-namespace DensoMTecGaugeReader.Infrastructure.ImageProcessing
+namespace DensoMTecGaugeReader.Infrastructure.Detectors
 {
     /// <summary>
-    /// Detects and recognizes numbers on gauge faces using contour detection and OCR.
+    /// Detects digit labels around the gauge rim via contour filtering.
+    /// Optional OCR hook can be provided to read text from each ROI.
     /// </summary>
     public class NumberDetector
     {
-        private readonly INumberRecognitionService _numberRecognitionService;
+        private readonly Func<Mat, string> _ocr;
 
-        public NumberDetector(INumberRecognitionService numberRecognitionService)
+        public NumberDetector(Func<Mat, string> ocr = null)
         {
-            _numberRecognitionService = numberRecognitionService;
+            _ocr = ocr;
         }
 
-        /// <summary>
-        /// Detect numbers on a gauge face.
-        /// </summary>
-        public List<AnalogGaugeNumber> DetectNumbers(Mat preprocessedImage, CircleSegment gaugeFace)
+        public List<AnalogGaugeNumber> DetectNumbers(string imagePath, GaugeFaceInfo face)
         {
-            Cv2.FindContours(
-                preprocessedImage,
-                out Point[][] contours,
-                out HierarchyIndex[] hierarchy,
-                RetrievalModes.List,
-                ContourApproximationModes.ApproxSimple
-            );
+            using var src = Cv2.ImRead(imagePath, ImreadModes.Color);
+            if (src.Empty())
+                throw new ArgumentException("Image not found or cannot be read.", nameof(imagePath));
 
-            // filter bounding boxes
-            List<(Rect BoundingBox, Point[][] Contour)> validContours = new();
-            foreach (var contour in contours)
+            // ring mask: between rInner and rOuter
+            using var maskInner = new Mat(src.Size(), MatType.CV_8UC1, Scalar.Black);
+            using var maskOuter = new Mat(src.Size(), MatType.CV_8UC1, Scalar.Black);
+
+            int rInner = (int)(face.Radius * 0.65);
+            int rOuter = (int)(face.Radius * 1.10);
+
+            var cpt = new Point((int)face.CenterX, (int)face.CenterY);
+            Cv2.Circle(maskInner, cpt, rInner, Scalar.White, -1);
+            Cv2.Circle(maskOuter, cpt, rOuter, Scalar.White, -1);
+
+            using var ringMask = new Mat();
+            Cv2.Subtract(maskOuter, maskInner, ringMask);
+
+            using var ring = new Mat();
+            Cv2.BitwiseAnd(src, src, ring, ringMask);
+
+            using var gray = new Mat();
+            using var thr = new Mat();
+            Cv2.CvtColor(ring, gray, ColorConversionCodes.BGR2GRAY);
+            Cv2.AdaptiveThreshold(gray, thr, 255, AdaptiveThresholdTypes.GaussianC, ThresholdTypes.BinaryInv, 31, 7);
+
+            Cv2.FindContours(thr, out var contours, out _, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+
+            // collect candidate boxes
+            var boxes = new List<Rect>();
+            foreach (var cnt in contours)
             {
-                Rect boundingBox = Cv2.BoundingRect(contour);
-                if (!IsNumberBoundingBoxValid(boundingBox, gaugeFace))
-                    continue;
+                var rect = Cv2.BoundingRect(cnt);
+                if (rect.Width < face.Radius * 0.04 || rect.Height < face.Radius * 0.04) continue;
+                if (rect.Width > face.Radius * 0.40 || rect.Height > face.Radius * 0.40) continue;
 
-                validContours.Add((boundingBox, new[] { contour }));
+                var center = new Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
+                double d = GeometryUtils.GetDistance(center, cpt);
+                if (d < rInner || d > rOuter) continue;
+
+                boxes.Add(rect);
             }
 
-            // group nearby contours
-            const double groupDistanceRatio = 0.15;
-            var groupedContours = GroupContours(validContours, gaugeFace.Radius * groupDistanceRatio);
+            // de-duplicate near-identical boxes (use utils)
+            var deduped = DeduplicateBoxes(boxes, threshold: 3.0);
 
-            // recognize numbers
-            List<AnalogGaugeNumber> gaugeNumbers = new();
-            foreach (var group in groupedContours)
+            var results = new List<AnalogGaugeNumber>();
+            foreach (var rect in deduped)
             {
-                if (group.Count == 0) continue;
-                gaugeNumbers.Add(GetGaugeNumber(group, preprocessedImage));
+                string text = string.Empty;
+                if (_ocr != null)
+                {
+                    using var roi = new Mat(gray, rect);
+                    text = _ocr(roi) ?? string.Empty;
+                    text = text.Trim();
+                }
+
+                double cx = rect.X + rect.Width / 2.0;
+                double cy = rect.Y + rect.Height / 2.0;
+
+                results.Add(new AnalogGaugeNumber
+                {
+                    Value = text,
+                    X = cx,
+                    Y = cy
+                });
             }
 
-            return gaugeNumbers;
+            return results;
         }
 
-        /// <summary>
-        /// Extract one gauge number from grouped contours using OCR service.
-        /// </summary>
-        private AnalogGaugeNumber GetGaugeNumber(
-            List<(Rect BoundingBox, Point[][] Contour)> contourGroup,
-            Mat preprocessedImage)
+        private static List<Rect> DeduplicateBoxes(List<Rect> boxes, double threshold)
         {
-            AnalogGaugeNumber result = new();
-
-            // remove duplicates
-            contourGroup = RemoveContoursWithDuplicatedBoundingBox(contourGroup);
-
-            var groupedBoundingBox = contourGroup.Select(x => x.BoundingBox).ToList();
-            result.BoundingBox = GeometryUtils.GetEnclosingBoundingBox(groupedBoundingBox);
-
-            // crop and pad region
-            Mat numberRegion = new(preprocessedImage, result.BoundingBox);
-            int borderSize = 4;
-            Mat paddedRegion = new();
-            Cv2.CopyMakeBorder(
-                numberRegion,
-                paddedRegion,
-                borderSize, borderSize, borderSize, borderSize,
-                BorderTypes.Constant,
-                Scalar.Black
-            );
-
-            // recognize value
-            result.Value = _numberRecognitionService.RecognizeNumber(paddedRegion);
+            var result = new List<Rect>();
+            foreach (var box in boxes.OrderBy(b => b.X).ThenBy(b => b.Y))
+            {
+                bool exists = result.Any(r => GeometryUtils.AreRectanglesAlmostEqual(r, box, threshold));
+                if (!exists) result.Add(box);
+            }
             return result;
         }
 
-        private static List<(Rect BoundingBox, Point[][] Contour)> RemoveContoursWithDuplicatedBoundingBox(
-            List<(Rect BoundingBox, Point[][] Contour)> contourGroup)
+        public static bool TryParseNumber(string s, out double value)
         {
-            List<(Rect BoundingBox, Point[][] Contour)> nonDuplicated = new();
-            HashSet<int> visited = new();
-
-            for (int i = 0; i < contourGroup.Count; i++)
-            {
-                if (visited.Contains(i)) continue;
-
-                Rect currentBox = contourGroup[i].BoundingBox;
-
-                for (int j = 0; j < contourGroup.Count; j++)
-                {
-                    if (visited.Contains(j) || i == j) continue;
-
-                    if (GeometryUtils.AreRectanglesAlmostEqual(currentBox, contourGroup[j].BoundingBox, 5))
-                        visited.Add(j);
-                }
-
-                nonDuplicated.Add(contourGroup[i]);
-            }
-
-            return nonDuplicated;
-        }
-
-        private static bool IsNumberBoundingBoxValid(Rect boundingBox, CircleSegment gaugeFace)
-        {
-            double meterArea = Math.PI * Math.Pow(gaugeFace.Radius, 2);
-
-            const double maxWidthRatio = 0.03;
-            const double maxHeightRatio = 0.03;
-            const double maxAreaRatio = 0.00125;
-            const double minDistanceRatio = 0.55;
-            const double maxDistanceRatio = 0.95;
-
-            if (boundingBox.Width < gaugeFace.Radius * maxWidthRatio) return false;
-            if (boundingBox.Height < gaugeFace.Radius * maxHeightRatio) return false;
-            if (boundingBox.Width * boundingBox.Height < meterArea * maxAreaRatio) return false;
-
-            double distance = GeometryUtils.GetDistance(boundingBox.TopLeft, (Point)gaugeFace.Center);
-            if (distance < gaugeFace.Radius * minDistanceRatio ||
-                distance > gaugeFace.Radius * maxDistanceRatio)
-                return false;
-
-            return true;
-        }
-
-        private static List<List<(Rect BoundingBox, Point[][] Contour)>> GroupContours(
-            List<(Rect BoundingBox, Point[][] Contour)> contours,
-            double distanceThreshold)
-        {
-            List<List<(Rect BoundingBox, Point[][] Contour)>> groupedContours = new();
-            HashSet<int> groupedIds = new();
-
-            for (int i = 0; i < contours.Count; i++)
-            {
-                if (groupedIds.Contains(i)) continue;
-
-                var current = contours[i];
-                List<(Rect BoundingBox, Point[][] Contour)> group = new() { current };
-                groupedIds.Add(i);
-
-                for (int j = 0; j < contours.Count; j++)
-                {
-                    if (groupedIds.Contains(j) || i == j) continue;
-
-                    if (GeometryUtils.IsBoxNearby(current.BoundingBox, contours[j].BoundingBox, distanceThreshold))
-                    {
-                        group.Add(contours[j]);
-                        groupedIds.Add(j);
-                    }
-                }
-
-                group = group.OrderBy(x => x.BoundingBox.X).ToList();
-                if (group.Count > 0) groupedContours.Add(group);
-            }
-
-            return groupedContours;
+            return double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
         }
     }
 }

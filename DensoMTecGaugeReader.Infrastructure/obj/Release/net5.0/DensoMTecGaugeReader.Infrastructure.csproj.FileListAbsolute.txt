@@ -1,0 +1,15 @@
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\bin\Release\net5.0\DensoMTecGaugeReader.Infrastructure.deps.json
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\bin\Release\net5.0\DensoMTecGaugeReader.Infrastructure.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\bin\Release\net5.0\ref\DensoMTecGaugeReader.Infrastructure.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\bin\Release\net5.0\DensoMTecGaugeReader.Infrastructure.pdb
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\bin\Release\net5.0\DensoMTecGaugeReader.Core.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\bin\Release\net5.0\DensoMTecGaugeReader.Core.pdb
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\obj\Release\net5.0\DensoMTecGaugeReader.Infrastructure.csproj.AssemblyReference.cache
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\obj\Release\net5.0\DensoMTecGaugeReader.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\obj\Release\net5.0\DensoMTecGaugeReader.Infrastructure.AssemblyInfoInputs.cache
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\obj\Release\net5.0\DensoMTecGaugeReader.Infrastructure.AssemblyInfo.cs
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\obj\Release\net5.0\DensoMTecGaugeReader.Infrastructure.csproj.CoreCompileInputs.cache
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\obj\Release\net5.0\DensoMTecGaugeReader.Infrastructure.csproj.CopyComplete
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\obj\Release\net5.0\DensoMTecGaugeReader.Infrastructure.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\obj\Release\net5.0\ref\DensoMTecGaugeReader.Infrastructure.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Infrastructure\obj\Release\net5.0\DensoMTecGaugeReader.Infrastructure.pdb

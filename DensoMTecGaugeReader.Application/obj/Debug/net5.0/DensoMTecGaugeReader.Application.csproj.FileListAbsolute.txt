@@ -1,0 +1,17 @@
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\bin\Debug\net5.0\DensoMTecGaugeReader.Application.deps.json
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\bin\Debug\net5.0\DensoMTecGaugeReader.Application.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\bin\Debug\net5.0\ref\DensoMTecGaugeReader.Application.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\bin\Debug\net5.0\DensoMTecGaugeReader.Application.pdb
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\bin\Debug\net5.0\DensoMTecGaugeReader.Core.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\bin\Debug\net5.0\DensoMTecGaugeReader.Infrastructure.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\bin\Debug\net5.0\DensoMTecGaugeReader.Core.pdb
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\bin\Debug\net5.0\DensoMTecGaugeReader.Infrastructure.pdb
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\obj\Debug\net5.0\DensoMTecGaugeReader.Application.csproj.AssemblyReference.cache
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\obj\Debug\net5.0\DensoMTecGaugeReader.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\obj\Debug\net5.0\DensoMTecGaugeReader.Application.AssemblyInfoInputs.cache
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\obj\Debug\net5.0\DensoMTecGaugeReader.Application.AssemblyInfo.cs
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\obj\Debug\net5.0\DensoMTecGaugeReader.Application.csproj.CoreCompileInputs.cache
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\obj\Debug\net5.0\DensoMTecGaugeReader.Application.csproj.CopyComplete
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\obj\Debug\net5.0\DensoMTecGaugeReader.Application.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\obj\Debug\net5.0\ref\DensoMTecGaugeReader.Application.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Application\obj\Debug\net5.0\DensoMTecGaugeReader.Application.pdb

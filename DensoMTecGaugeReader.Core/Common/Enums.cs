@@ -14,4 +14,20 @@ namespace DensoMTecGaugeReader.Core.Common.Enums
         Square,
         Digital
     }
+
+    public enum ScaleType
+    {
+        Pressure,
+        Thermo50,
+        Thermo100
+    }
+
+    public enum ResultStatus
+    {
+        Success,
+        Failure,
+        ValidationError,
+        NotFound,
+        Warning
+    }
 }

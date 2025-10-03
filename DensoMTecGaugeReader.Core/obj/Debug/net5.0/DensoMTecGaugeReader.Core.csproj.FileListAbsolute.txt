@@ -3,3 +3,15 @@ D:\VINHTT\DensoMTechGaugeReader_\DensoMTecGaugeReader.Core\obj\Debug\net5.0\Dens
 D:\VINHTT\DensoMTechGaugeReader_\DensoMTecGaugeReader.Core\obj\Debug\net5.0\DensoMTecGaugeReader.Core.AssemblyInfoInputs.cache
 D:\VINHTT\DensoMTechGaugeReader_\DensoMTecGaugeReader.Core\obj\Debug\net5.0\DensoMTecGaugeReader.Core.AssemblyInfo.cs
 D:\VINHTT\DensoMTechGaugeReader_\DensoMTecGaugeReader.Core\obj\Debug\net5.0\DensoMTecGaugeReader.Core.csproj.CoreCompileInputs.cache
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\bin\Debug\net5.0\DensoMTecGaugeReader.Core.deps.json
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\bin\Debug\net5.0\DensoMTecGaugeReader.Core.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\bin\Debug\net5.0\ref\DensoMTecGaugeReader.Core.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\bin\Debug\net5.0\DensoMTecGaugeReader.Core.pdb
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\obj\Debug\net5.0\DensoMTecGaugeReader.Core.csproj.AssemblyReference.cache
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\obj\Debug\net5.0\DensoMTecGaugeReader.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\obj\Debug\net5.0\DensoMTecGaugeReader.Core.AssemblyInfoInputs.cache
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\obj\Debug\net5.0\DensoMTecGaugeReader.Core.AssemblyInfo.cs
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\obj\Debug\net5.0\DensoMTecGaugeReader.Core.csproj.CoreCompileInputs.cache
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\obj\Debug\net5.0\DensoMTecGaugeReader.Core.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\obj\Debug\net5.0\ref\DensoMTecGaugeReader.Core.dll
+D:\VinhTT\DensoMTechGaugeReader_ RF\DensoMTecGaugeReader.Core\obj\Debug\net5.0\DensoMTecGaugeReader.Core.pdb

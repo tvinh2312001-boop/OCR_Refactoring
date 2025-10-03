@@ -1,79 +1,119 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using DensoMTecGaugeReader.Core.Common;
+using DensoMTecGaugeReader.Core.Contracts;
+using DensoMTecGaugeReader.Core.Contracts.Gauges;
+using DensoMTecGaugeReader.Core.Models;
+using DensoMTecGaugeReader.Core.Services.Measurement;
 using OpenCvSharp;
-using DensoMTecGaugeReader.Core.Exceptions;
-using DensoMTecGaugeReader.Infrastructure.Utils;
 
-namespace DensoMTecGaugeReader.Infrastructure.ImageProcessing
+namespace DensoMTecGaugeReader.Infrastructure.Detectors
 {
     /// <summary>
-    /// Detects the hand (needle) of a gauge using line detection (HoughLinesP).
+    /// Detects the gauge hand/needle via masked ROI + HoughLinesP.
     /// </summary>
-    public static class GaugeHandDetector
+    public class GaugeHandDetector : IGaugeHandDetector
     {
-        public static LineSegmentPoint DetectGaugeHand(Mat image, CircleSegment face)
+        public GaugeHandInfo DetectHand(string imagePath, GaugeFaceInfo faceInfo)
         {
-            Mat preprocessed = GetPreprocessedImageForHandDetection(image, face);
+            using var src = Cv2.ImRead(imagePath, ImreadModes.Color);
+            if (src.Empty())
+                throw new ArgumentException("Image not found or cannot be read.", nameof(imagePath));
 
-            var detectedLines = Cv2.HoughLinesP(
-                preprocessed,
+            // circular mask (fix MatExpr -> Mat)
+            using var mask = new Mat(src.Size(), MatType.CV_8UC1, Scalar.Black);
+            Cv2.Circle(
+                mask,
+                new Point((int)faceInfo.CenterX, (int)faceInfo.CenterY),
+                (int)(faceInfo.Radius * 0.98),
+                Scalar.White,
+                thickness: -1);
+
+            using var roi = new Mat();
+            Cv2.BitwiseAnd(src, src, roi, mask);
+
+            using var gray = new Mat();
+            using var blur = new Mat();
+            using var edges = new Mat();
+
+            Cv2.CvtColor(roi, gray, ColorConversionCodes.BGR2GRAY);
+            Cv2.GaussianBlur(gray, blur, new Size(5, 5), 1.5);
+            Cv2.Canny(blur, edges, 60, 150);
+
+            int minLen = (int)(faceInfo.Radius * 0.35);
+            int maxGap = (int)(faceInfo.Radius * 0.05);
+
+            var lines = Cv2.HoughLinesP(
+                edges,
                 rho: 1,
                 theta: Math.PI / 180,
-                threshold: 50,
-                minLineLength: 60,
-                maxLineGap: 10
-            );
+                threshold: 40,
+                minLineLength: Math.Max(15, minLen),
+                maxLineGap: Math.Max(5, maxGap));
 
-            List<Point> handTips = new();
-            foreach (var line in detectedLines)
+            if (lines == null || lines.Length == 0)
+                throw new InvalidOperationException("No needle-like line detected.");
+
+            var center = new Point((int)faceInfo.CenterX, (int)faceInfo.CenterY);
+            var circle = new CircleSegment(new Point2f((float)faceInfo.CenterX, (float)faceInfo.CenterY), (float)faceInfo.Radius);
+
+            var candidates = new List<(LineSegmentPoint Line, double Score, OpenCvSharp.Point FarEnd)>();
+
+            foreach (var l in lines)
             {
-                Point2f direction = line.P2 - line.P1;
-                float norm = (float)Math.Sqrt(direction.X * direction.X + direction.Y * direction.Y);
-                if (norm == 0) continue;
+                // line validity: inside face (allow small slack)
+                if (!GeometryUtils.IsLineInsideCircle(l, circle, thresholdRatio: 1.02))
+                    continue;
 
-                Point2f unitDirection = new(direction.X / norm, direction.Y / norm);
+                var p1 = l.P1;
+                var p2 = l.P2;
+                double d1 = GeometryUtils.GetDistance(center, p1);
+                double d2 = GeometryUtils.GetDistance(center, p2);
 
-                double dist1 = GeometryUtils.Distance(line.P1, face.Center);
-                double dist2 = GeometryUtils.Distance(line.P2, face.Center);
-                Point2f farthest = dist1 > dist2 ? line.P1 : line.P2;
+                var near = d1 < d2 ? p1 : p2;
+                var far = d1 < d2 ? p2 : p1;
 
-                Point2f v = farthest - face.Center;
-                float dot = v.X * unitDirection.X + v.Y * unitDirection.Y;
+                // near endpoint must be close to center
+                if (GeometryUtils.GetDistance(center, near) > faceInfo.Radius * 0.35) continue;
 
-                Point foot = GeometryUtils.FindFootOfPerpendicular(line, (Point)face.Center);
+                // far endpoint should be long enough and not past the rim
+                double dFar = GeometryUtils.GetDistance(center, far);
+                if (dFar < faceInfo.Radius * 0.45) continue;
+                if (dFar > faceInfo.Radius * 1.05) continue;
 
-                Point2f intersection = dot >= 0
-                    ? new Point2f(
-                        foot.X + unitDirection.X * (float)(face.Radius * 0.75),
-                        foot.Y + unitDirection.Y * (float)(face.Radius * 0.75))
-                    : new Point2f(
-                        foot.X - unitDirection.X * (float)(face.Radius * 0.75),
-                        foot.Y - unitDirection.Y * (float)(face.Radius * 0.75));
-
-                handTips.Add((Point)intersection);
+                double len = GeometryUtils.GetDistance(p1, p2);
+                double score = len;
+                candidates.Add((l, score, far));
             }
 
-            if (handTips.Count == 0)
-                throw new GaugeReadingProcessException(GaugeErrorCode.GaugeHandNotFound);
+            if (candidates.Count == 0)
+                throw new InvalidOperationException("No valid needle candidate found.");
 
-            Point avgTip = GeometryUtils.GetCenterPoint(handTips);
-            return new LineSegmentPoint((Point)face.Center, avgTip);
-        }
+            var best = candidates.OrderByDescending(c => c.Score).First();
 
-        private static Mat GetPreprocessedImageForHandDetection(Mat image, CircleSegment face)
-        {
-            Mat blurred = new();
-            Cv2.GaussianBlur(image, blurred, new Size(7, 7), 0);
+            var hand = new GaugeHandInfo
+            {
+                StartX = faceInfo.CenterX,
+                StartY = faceInfo.CenterY,
+                EndX = best.FarEnd.X,
+                EndY = best.FarEnd.Y
+            };
 
-            Mat edges = new();
-            Cv2.Canny(blurred, edges, 100, 300);
+            var angleCalc = new AngleCalculator();
+            hand.Angle = angleCalc.CalculateAngle(faceInfo, hand);
 
-            // mask to focus on gauge interior
-            Mat mask = new(edges.Size(), MatType.CV_8UC1, Scalar.Black);
-            Cv2.Circle(mask, (Point)face.Center, (int)(face.Radius * 0.7), Scalar.White, -1);
+            var start = new Point((int)hand.StartX, (int)hand.StartY);
+            var end = new Point((int)hand.EndX, (int)hand.EndY);
 
-            Mat masked = new();
-            edges.CopyTo(masked, mask);
+            Cv2.Line(src, start, end, Scalar.Red, 2);
 
-            return masked;
+            Cv2.Circle(src, start, 5, Scalar.Blue, -1);
+
+            Cv2.ImShow("Gauge Hand", src);
+            Cv2.WaitKey(0);
+            Cv2.DestroyAllWindows();
+            return hand;
         }
     }
 }

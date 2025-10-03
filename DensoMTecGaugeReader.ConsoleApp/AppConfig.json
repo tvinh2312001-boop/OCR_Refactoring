@@ -1,0 +1,18 @@
+{
+  "ImagePath": "D:\\VinhTT\\GaugesType\\PressureGauge.PNG",
+  "GaugeId": "T50",
+  "GaugeType": "Pressure",
+  "FaceType": "Round",
+  "Unit": "ÅãC",
+  "StartAngle": 55,
+  "EndAngle": 265,
+  "MinValue": 0,
+  "MaxValue": 1,
+  "NumberToAngleMap": {
+    "02": 55,
+    "04": 106,
+    "06": 159,
+    "08": 221,
+    "1": 265
+  }
+}

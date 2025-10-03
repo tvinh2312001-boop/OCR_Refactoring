@@ -1,14 +1,12 @@
 using DensoMTecGaugeReader.Core.Models;
 
-namespace DensoMTecGaugeReader.Core.Contracts
+namespace DensoMTecGaugeReader.Core.Contracts.Gauges
 {
     /// <summary>
-    /// Interface for detecting gauge hands (needles).
-    /// Implementations will use computer vision to locate the hand
-    /// and return its geometric information.
+    /// Detects the hand/needle of a gauge.
     /// </summary>
     public interface IGaugeHandDetector
     {
-        GaugeHandInfo Detect(GaugeFaceInfo faceInfo);
+        GaugeHandInfo DetectHand(string imagePath, GaugeFaceInfo faceInfo);
     }
 }

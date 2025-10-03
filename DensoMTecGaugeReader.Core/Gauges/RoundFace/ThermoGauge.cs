@@ -2,10 +2,14 @@ using DensoMTecGaugeReader.Core.Models;
 
 namespace DensoMTecGaugeReader.Core.Gauges
 {
-    public class PressureGauge : RoundGaugeBase
+    /// <summary>
+    /// Represents a thermometer gauge (round-face).
+    /// </summary>
+    public class ThermoGauge : RoundFaceGaugeBase
     {
-        public override string Name => "Pressure Gauge";
-
-        public PressureGauge(GaugeConfig config) : base(config) { }
+        public ThermoGauge(string id, GaugeConfig config)
+            : base(id, config.Unit, config)
+        {
+        }
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj": {}
+    "D:\\VinhTT\\DensoMTechGaugeReader_ RF\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj": {}
   },
   "projects": {
-    "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {
+    "D:\\VinhTT\\DensoMTechGaugeReader_ RF\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj",
+        "projectUniqueName": "D:\\VinhTT\\DensoMTechGaugeReader_ RF\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj",
         "projectName": "DensoMTecGaugeReader.Core",
-        "projectPath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj",
+        "projectPath": "D:\\VinhTT\\DensoMTechGaugeReader_ RF\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj",
         "packagesPath": "C:\\Users\\vinh.tt2\\.nuget\\packages\\",
-        "outputPath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\obj\\",
+        "outputPath": "D:\\VinhTT\\DensoMTechGaugeReader_ RF\\DensoMTecGaugeReader.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
@@ -62,14 +62,14 @@
         }
       }
     },
-    "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj": {
+    "D:\\VinhTT\\DensoMTechGaugeReader_ RF\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj",
+        "projectUniqueName": "D:\\VinhTT\\DensoMTechGaugeReader_ RF\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj",
         "projectName": "DensoMTecGaugeReader.Infrastructure",
-        "projectPath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj",
+        "projectPath": "D:\\VinhTT\\DensoMTechGaugeReader_ RF\\DensoMTecGaugeReader.Infrastructure\\DensoMTecGaugeReader.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\vinh.tt2\\.nuget\\packages\\",
-        "outputPath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Infrastructure\\obj\\",
+        "outputPath": "D:\\VinhTT\\DensoMTechGaugeReader_ RF\\DensoMTecGaugeReader.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
@@ -90,8 +90,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {
-                "projectPath": "D:\\VinhTT\\DensoMTechGaugeReader_\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj"
+              "D:\\VinhTT\\DensoMTechGaugeReader_ RF\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj": {
+                "projectPath": "D:\\VinhTT\\DensoMTechGaugeReader_ RF\\DensoMTecGaugeReader.Core\\DensoMTecGaugeReader.Core.csproj"
               }
             }
           }
@@ -107,6 +107,10 @@
           "targetAlias": "net5.0",
           "dependencies": {
             "OpenCvSharp4": {
+              "target": "Package",
+              "version": "[4.11.0.20250507, )"
+            },
+            "OpenCvSharp4.Extensions": {
               "target": "Package",
               "version": "[4.11.0.20250507, )"
             },

@@ -1,112 +1,89 @@
-using OpenCvSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using DensoMTecGaugeReader.Core.Common;
 using DensoMTecGaugeReader.Core.Models;
-using DensoMTecGaugeReader.Core.Exceptions;
-using DensoMTecGaugeReader.Infrastructure.Utils;
+using DensoMTecGaugeReader.Infrastructure.Models;
+using OpenCvSharp;
 
-namespace DensoMTecGaugeReader.Infrastructure.ImageProcessing
+namespace DensoMTecGaugeReader.Infrastructure.Detectors
 {
     /// <summary>
-    /// Provides methods for detecting the baseline (reference axis) of a round gauge face.
-    /// Baseline is determined by analyzing gauge numbers and their relative angles.
+    /// Estimates the baseline (start-angle) from detected numbers.
+    /// Useful to auto-calibrate GaugeConfig.StartAngle.
     /// </summary>
-    public static class BaseLineDetector
+    public class BaseLineDetector
     {
-        /// <summary>
-        /// Detect baseline line of a gauge face from detected numbers.
-        /// </summary>
-        public static LineSegmentPoint DetectBaseLine(List<AnalogGaugeNumber> numbers, CircleSegment face)
+        public double EstimateBaselineAngle(GaugeFaceInfo face, IEnumerable<AnalogGaugeNumber> numbers, GaugeConfig config)
         {
-            const double angleThreshold = 5;
-            numbers = FilterValidNumbers(numbers);
+            if (numbers == null) numbers = Enumerable.Empty<AnalogGaugeNumber>();
 
-            List<Tuple<AnalogGaugeNumber, AnalogGaugeNumber>> validPairs = new();
+            // 1) exact MinValue label
+            var exact = numbers
+                .Select(n => (n, Parsed: ParseOrNull(n.Value)))
+                .Where(t => t.Parsed.HasValue && NearlyEqual(t.Parsed.Value, config.MinValue))
+                .Select(t => t.n)
+                .FirstOrDefault();
 
-            // Pair numbers and check consistency with expected angle
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                var num1 = numbers[i];
-                var lineToCenter1 = new LineSegmentPoint(
-                    (Point)face.Center,
-                    GeometryUtils.GetRectangleCenter(num1.BoundingBox)
-                );
-                var defaultAngle1 = GetDefaultAngleByValue(num1.Value);
+            if (exact != null) return AngleOf(face, exact);
 
-                for (int j = i + 1; j < numbers.Count; j++)
-                {
-                    var num2 = numbers[j];
-                    var lineToCenter2 = new LineSegmentPoint(
-                        (Point)face.Center,
-                        GeometryUtils.GetRectangleCenter(num2.BoundingBox)
-                    );
-                    var defaultAngle2 = GetDefaultAngleByValue(num2.Value);
+            // 2) smallest numeric label
+            var smallest = numbers
+                .Select(n => (n, Parsed: ParseOrNull(n.Value)))
+                .Where(t => t.Parsed.HasValue)
+                .OrderBy(t => t.Parsed.Value)
+                .Select(t => t.n)
+                .FirstOrDefault();
 
-                    var realAngle = GeometryUtils.CalculateAngle(lineToCenter2, lineToCenter1);
-                    var expectedAngle = Math.Abs(defaultAngle2 - defaultAngle1);
+            if (smallest != null) return AngleOf(face, smallest);
 
-                    if ((expectedAngle > realAngle - angleThreshold && expectedAngle < realAngle + angleThreshold) ||
-                        (360 - expectedAngle > realAngle - angleThreshold && 360 - expectedAngle < realAngle + angleThreshold))
-                    {
-                        validPairs.Add(new Tuple<AnalogGaugeNumber, AnalogGaugeNumber>(num1, num2));
-                    }
-                }
-            }
-
-            if (validPairs.Count == 0)
-                throw new GaugeReadingProcessException(GaugeErrorCode.GaugeBaseLineNotFound);
-
-            // Build candidate baselines
-            List<LineSegmentPoint> candidateLines = new();
-            foreach (var pair in validPairs)
-            {
-                candidateLines.Add(
-                    GetBaseLineFromNumber(pair.Item1, (Point)face.Center)
-                );
-            }
-
-            // Average baseline
-            double baseLineLength = face.Radius;
-            return GeometryUtils.GetAverageLine(candidateLines, baseLineLength);
+            // 3) fallback: straight up (12 o'clock)
+            return 90.0;
         }
 
-        /// <summary>
-        /// Build baseline from a number value and face center.
-        /// </summary>
-        private static LineSegmentPoint GetBaseLineFromNumber(AnalogGaugeNumber number, Point faceCenter)
+        public GaugeHandInfo BuildBaselineAsHand(GaugeFaceInfo face, double baselineAngleDeg, double lengthFactor = 0.9)
         {
-            var lineToCenter = new LineSegmentPoint(
-                faceCenter,
-                GeometryUtils.GetRectangleCenter(number.BoundingBox)
-            );
+            double rad = baselineAngleDeg * (Math.PI / 180.0);
+            double dx = Math.Cos(rad) * face.Radius * lengthFactor;
+            double dy = Math.Sin(rad) * face.Radius * lengthFactor;
 
-            double defaultAngle = GetDefaultAngleByValue(number.Value);
-
-            return GeometryUtils.GetLineFromLine(lineToCenter, -defaultAngle, 100);
-        }
-
-        /// <summary>
-        /// Default reference angle for a given gauge number.
-        /// This mapping should be configured depending on gauge type.
-        /// </summary>
-        private static double GetDefaultAngleByValue(string value)
-        {
-            return value switch
+            return new GaugeHandInfo
             {
-                "02" or "2" => 53,
-                "04" or "4" => 111,
-                "06" or "6" => 164,
-                "08" or "8" => 212,
-                "1"         => 265,
-                _           => 0
+                StartX = face.CenterX,
+                StartY = face.CenterY,
+                EndX = face.CenterX + dx,
+                EndY = face.CenterY + dy,
+                Angle = baselineAngleDeg
             };
         }
 
-        /// <summary>
-        /// Filter out valid numbers for baseline detection.
-        /// </summary>
-        private static List<AnalogGaugeNumber> FilterValidNumbers(List<AnalogGaugeNumber> numbers)
+        private static double AngleOf(GaugeFaceInfo face, AnalogGaugeNumber num)
         {
-            HashSet<string> validNumbers = new() { "02", "04", "06", "08", "1", "2", "4", "6", "8" };
-            return numbers.Where(x => validNumbers.Contains(x.Value)).ToList();
+            // Use GeometryUtils.CalculateAngle by building two line segments:
+            // ref line: center -> +X axis; point line: center -> number
+            var center = new Point((int)face.CenterX, (int)face.CenterY);
+            var refEnd = new Point(center.X + (int)face.Radius, center.Y); // +X direction
+            var ptEnd = new Point((int)num.X, (int)num.Y);
+
+            var lineRef = new LineSegmentPoint(center, refEnd);
+            var lineNum = new LineSegmentPoint(center, ptEnd);
+
+            double deg = GeometryUtils.CalculateAngle(lineRef, lineNum);
+            // Ensure [0, 360)
+            if (deg < 0) deg += 360.0;
+            if (deg >= 360.0) deg -= 360.0;
+            return deg;
         }
+
+        private static double? ParseOrNull(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return null;
+            if (double.TryParse(s.Replace(',', '.'), System.Globalization.NumberStyles.Float,
+                                System.Globalization.CultureInfo.InvariantCulture, out var v))
+                return v;
+            return null;
+        }
+
+        private static bool NearlyEqual(double a, double b, double eps = 1e-3) => Math.Abs(a - b) <= eps;
     }
 }

@@ -1,13 +1,12 @@
-using DensoMTecGaugeReader.Core.Models;
-
 namespace DensoMTecGaugeReader.Core.Contracts
 {
     /// <summary>
-    /// Base interface for all gauges (Pressure, Thermo, Compound, Digital).
+    /// Represents a general gauge (analog or digital).
     /// </summary>
     public interface IGauge
     {
-        string Name { get; }
-        MeasurementResult Measure(GaugeFaceInfo face, GaugeHandInfo? hand);
+        string Id { get; }
+        string Unit { get; }
+        Models.MeasurementResult ReadValue();
     }
 }

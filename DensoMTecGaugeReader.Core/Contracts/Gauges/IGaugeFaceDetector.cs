@@ -3,16 +3,10 @@ using DensoMTecGaugeReader.Core.Models;
 namespace DensoMTecGaugeReader.Core.Contracts
 {
     /// <summary>
-    /// Interface for detecting gauge faces.
-    /// Each implementation handles a specific face type (round, square, digital).
+    /// Detects the face of a gauge from an image source.
     /// </summary>
     public interface IGaugeFaceDetector
     {
-        /// <summary>
-        /// Detect gauge face information from an input image.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <returns>Detected face info</returns>
-        GaugeFaceInfo Detect(OpenCvSharp.Mat image);
+        GaugeFaceInfo DetectFace(string imagePath);
     }
 }

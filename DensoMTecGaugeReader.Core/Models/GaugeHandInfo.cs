@@ -1,19 +1,14 @@
-using OpenCvSharp;
-
 namespace DensoMTecGaugeReader.Core.Models
 {
     /// <summary>
-    /// Represents the detected hand/needle of a gauge.
+    /// Information of a detected gauge hand/needle.
     /// </summary>
     public class GaugeHandInfo
     {
-        public LineSegmentPoint Line { get; set; }
+        public double StartX { get; set; }
+        public double StartY { get; set; }
+        public double EndX { get; set; }
+        public double EndY { get; set; }
         public double Angle { get; set; }
-
-        public GaugeHandInfo(LineSegmentPoint line, double angle)
-        {
-            Line = line;
-            Angle = angle;
-        }
     }
 }

@@ -5,34 +5,57 @@ using DensoMTecGaugeReader.Core.Services.Measurement;
 namespace DensoMTecGaugeReader.Core.Gauges
 {
     /// <summary>
-    /// Base class for round gauges.
-    /// Provides shared measurement logic using round face and config.
+    /// Base class for round-face gauges (analog).
+    /// Provides logic for converting hand position to measurement value.
     /// </summary>
-    public abstract class RoundGaugeBase : IGauge
+    public abstract class RoundFaceGaugeBase : IGauge
     {
-        public abstract string Name { get; }
+        public string Id { get; protected set; }
+        public string Unit { get; protected set; }
+        public GaugeConfig Config { get; protected set; }
+        public GaugeFaceInfo Face { get; protected set; }
+        public GaugeHandInfo Hand { get; protected set; }
 
-        protected readonly GaugeConfig _config;
-
-        protected RoundGaugeBase(GaugeConfig config)
+        protected RoundFaceGaugeBase(string id, string unit, GaugeConfig config)
         {
-            _config = config;
+            Id = id;
+            Unit = unit;
+            Config = config;
         }
 
-        public virtual MeasurementResult Measure(GaugeFaceInfo face, GaugeHandInfo? hand)
+        /// <summary>
+        /// Sets the detected face info (from detector).
+        /// </summary>
+        public void SetFace(GaugeFaceInfo faceInfo)
         {
-            if (hand == null)
-                throw new GaugeException(GaugeErrorCode.HandNotDetected, $"No hand detected for {Name}.");
+            Face = faceInfo;
+        }
 
-            double scaleAngle = AngleCalculator.Normalize(hand.Angle, face, hand);
+        /// <summary>
+        /// Sets the detected hand info (from detector).
+        /// </summary>
+        public void SetHand(GaugeHandInfo handInfo)
+        {
+            Hand = handInfo;
+        }
 
-            double value = ScaleMapper.Map(scaleAngle,
-                                           _config.MinValue,
-                                           _config.MaxValue,
-                                           _config.StartAngle,
-                                           _config.EndAngle);
+        /// <summary>
+        /// Reads the current gauge value by calculating angle and mapping to real value.
+        /// </summary>
+        public MeasurementResult ReadValue()
+        {
+            var angleCalculator = new AngleCalculator();
+            var scaleMapper = new ScaleMapper();
 
-            return new MeasurementResult(hand.Angle, scaleAngle, value, _config.Unit);
+            double angle = angleCalculator.CalculateAngle(Face, Hand);
+            double value = scaleMapper.MapAngleToValue(Config, angle);
+
+            return new MeasurementResult
+            {
+                RawAngle = angle,
+                Value = value,
+                Unit = Unit
+            };
         }
     }
 }
